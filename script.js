@@ -1,200 +1,185 @@
-/* NAVBAR EFFECT */
+/* ======================
+   TMDB API
+====================== */
+const apiKey = "377cb013b8deea82fb503557f890f139";
 
-const navbar = document.querySelector(".navbar");
-window.addEventListener("scroll", () => {
-    if(window.scrollY > 50){
-        navbar.style.background = "#0b0b0b";
-    }
-    else{
-        navbar.style.background = "rgba(11,11,11,0.92)";
-    }
-
-});
-
-/* SEARCH */
-const searchInput = document.getElementById("searchInput");
-searchInput.addEventListener("keyup", () => {
-    const searchValue = searchInput.value.toLowerCase();
-    const movieCards = document.querySelectorAll(".movie-card");
-    movieCards.forEach(card => {
-        const movieName = card.innerText.toLowerCase();
-        if(movieName.includes(searchValue)){
-            card.style.display = "flex";
-        }
-        else{
-            card.style.display = "none";
-        }
-    });
-});
-
-/* CARD CLICK */
-const cards = document.querySelectorAll(".movie-card");
-cards.forEach(card => {
-    card.addEventListener("click", () => {
-        const movieTitle = card.innerText;
-        alert("Opening " + movieTitle);
-    });
-});
-
-/* HERO SLIDER */
 const hero = document.querySelector(".hero");
 const heroTitle = document.getElementById("hero-title");
 const heroDescription = document.getElementById("hero-description");
 const heroTag = document.getElementById("hero-tag");
-const heroMovies = [
-{
-    title:"Shadow City",
-    description:"In a world ruled by secrets, one man must uncover the truth before the city falls.",
-    tag:"#1 TRENDING NOW",
-    image:"https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1600"
-},
 
-{
-    title:"War Zone",
-    description:"A retired soldier returns for one final mission against a dangerous syndicate.",
-    tag:"#2 ACTION MOVIE",
-    image:"https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?q=80&w=1600"
-},
-
-{
-    title:"Dark Ocean",
-    description:"A mysterious signal from the sea changes humanity forever.",
-    tag:"#1 SCI-FI SERIES",
-    image:"https://images.unsplash.com/photo-1505685296765-3a2736de412f?q=80&w=1600"
-},
-
-{
-    title:"Final Byte",
-    description:"A genius hacker discovers a hidden AI capable of controlling the world.",
-    tag:"#1 TECH THRILLER",
-    image:"https://images.unsplash.com/photo-1518932945647-7a1c969f8be2?q=80&w=1600"
-}
-];
-
-let currentMovie = 0;
-function changeHero(){
-    currentMovie++;
-    if(currentMovie >= heroMovies.length){
-        currentMovie = 0;
-    }
-    hero.style.backgroundImage = `
-    linear-gradient(
-        to right,
-        rgba(11,11,11,0.95),
-        rgba(11,11,11,0.45),
-        rgba(11,11,11,0.2)
-    ),
-    url('${heroMovies[currentMovie].image}')
-    `;
-    heroTitle.textContent = heroMovies[currentMovie].title;
-    heroDescription.textContent = heroMovies[currentMovie].description;
-    heroTag.textContent = heroMovies[currentMovie].tag;
-
-}
-
-/* INITIAL HERO */
-
-hero.style.backgroundImage = `
-linear-gradient(
-    to right,
-    rgba(11,11,11,0.95),
-    rgba(11,11,11,0.45),
-    rgba(11,11,11,0.2)
-),
-url('${heroMovies[0].image}')
-`;
-
-/* AUTO SLIDE */
-setInterval(changeHero, 5000);
-
-/* PROFILE DROPDOWN */
+const trendingMovies = document.getElementById("trendingMovies");
+const searchInput = document.getElementById("searchInput");
 const profileBtn = document.getElementById("profileBtn");
 const profileDropdown = document.getElementById("profileDropdown");
-profileBtn.addEventListener("click", () => {
-    profileDropdown.classList.toggle("active");
+const trailerModal = document.getElementById("trailerModal");
+const trailerVideo = document.getElementById("trailerVideo");
+const closeTrailer = document.getElementById("closeTrailer");
 
+let heroMovies = [];
+let currentHeroIndex = 0;
+
+/* ======================
+   HERO SECTION
+====================== */
+
+function initHero() {
+    if (heroMovies.length === 0) return;
+
+    const movie = heroMovies[0];
+
+    hero.style.backgroundImage = `
+        linear-gradient(to right, rgba(11,11,11,0.95), rgba(11,11,11,0.45), rgba(11,11,11,0.2)),
+        url(https://image.tmdb.org/t/p/original${movie.backdrop_path})
+    `;
+
+    heroTitle.textContent = movie.title;
+    heroDescription.textContent = movie.overview;
+    heroTag.textContent = "🔥 TRENDING NOW";
+}
+
+function updateHero() {
+    const movie = heroMovies[currentHeroIndex];
+
+    hero.style.backgroundImage = `
+        linear-gradient(to right, rgba(11,11,11,0.95), rgba(11,11,11,0.45), rgba(11,11,11,0.2)),
+        url(https://image.tmdb.org/t/p/original${movie.backdrop_path})
+    `;
+
+    heroTitle.textContent = movie.title;
+    heroDescription.textContent = movie.overview;
+    heroTag.textContent = "🔥 TRENDING NOW";
+}
+
+function startHeroSlider() {
+    setInterval(() => {
+        currentHeroIndex = (currentHeroIndex + 1) % heroMovies.length;
+        updateHero();
+    }, 5000);
+}
+
+/* ======================
+   FETCH HERO + TRENDING
+====================== */
+
+async function getHeroMovies() {
+    try {
+        const res = await fetch(
+            `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}`
+        );
+
+        const data = await res.json();
+        heroMovies = data.results.slice(0, 5);
+
+        initHero();
+        startHeroSlider();
+
+    } catch (err) {
+        console.error("Hero error:", err);
+    }
+}
+
+async function getTrendingMovies() {
+    try {
+        const res = await fetch(
+            `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}`
+        );
+
+        const data = await res.json();
+        showMovies(data.results);
+
+    } catch (err) {
+        console.error("Trending error:", err);
+    }
+}
+
+/* ======================
+   DISPLAY MOVIES
+====================== */
+
+function showMovies(movies) {
+    trendingMovies.innerHTML = "";
+
+    movies.forEach(movie => {
+        const card = document.createElement("div");
+        card.classList.add("movie-card");
+
+        card.innerHTML = `
+            <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+            <div class="movie-overlay">
+                <button class="play-btn" data-trailer="">
+                    ▶
+                </button>
+                <h3>${movie.title}</h3>
+                <p>⭐ ${movie.vote_average.toFixed(1)}</p>
+            </div>
+        `;
+
+        trendingMovies.appendChild(card);
+    });
+}
+
+/* ======================
+   SEARCH
+====================== */
+
+searchInput?.addEventListener("input", () => {
+    const value = searchInput.value.toLowerCase();
+    const cards = document.querySelectorAll(".movie-card");
+
+    cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(value) ? "flex" : "none";
+    });
 });
 
-/* CLOSE WHEN CLICKING OUTSIDE */
+/* ======================
+   PROFILE DROPDOWN
+====================== */
+
+profileBtn?.addEventListener("click", () => {
+    profileDropdown.classList.toggle("active");
+});
+
 window.addEventListener("click", (e) => {
-    if(
-        !profileBtn.contains(e.target)
-        &&
+    if (
+        profileBtn &&
+        profileDropdown &&
+        !profileBtn.contains(e.target) &&
         !profileDropdown.contains(e.target)
-    ){
+    ) {
         profileDropdown.classList.remove("active");
     }
 });
 
-/* TRAILER MODAL */
-const trailerModal = document.getElementById("trailerModal");
-const trailerVideo = document.getElementById("trailerVideo");
-const closeTrailer = document.getElementById("closeTrailer");
-const playButtons = document.querySelectorAll(".play-btn");
+/* ======================
+   TRAILER MODAL
+====================== */
 
-/* OPEN TRAILER */
-playButtons.forEach(button => {
-    button.addEventListener("click", () => {
-        const trailerLink = button.dataset.trailer;
-        trailerVideo.src = trailerLink + "?autoplay=1";
+document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".play-btn");
+
+    if (btn) {
         trailerModal.classList.add("active");
-    });
+        trailerVideo.src = "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1";
+    }
 });
 
-/* CLOSE TRAILER */
-closeTrailer.addEventListener("click", () => {
+closeTrailer?.addEventListener("click", () => {
     trailerModal.classList.remove("active");
     trailerVideo.src = "";
 });
 
-/* CLOSE OUTSIDE CLICK */
-
 window.addEventListener("click", (e) => {
-    if(e.target === trailerModal){
+    if (e.target === trailerModal) {
         trailerModal.classList.remove("active");
         trailerVideo.src = "";
     }
 });
 
-/* TMDB API */
-const apiKey = "377cb013b8deea82fb503557f890f139";
-const trendingMovies = document.getElementById("trendingMovies");
-/* FETCH TRENDING MOVIES */
-async function getTrendingMovies(){
-    const response = await fetch(
-        `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}`
-    );
-    const data = await response.json();
-    showMovies(data.results);
-}
+/* ======================
+   INIT APP
+====================== */
 
-/* DISPLAY MOVIES */
-
-function showMovies(movies){
-    trendingMovies.innerHTML = "";
-    movies.forEach(movie => {
-        const movieCard = document.createElement("div");
-        movieCard.classList.add("movie-card");
-        movieCard.innerHTML = `
-            <img
-            src="https://image.tmdb.org/t/p/w500${movie.poster_path}"
-            alt="${movie.title}"
-            >
-            <div class="movie-overlay">
-                <button
-                class="play-btn">
-                ▶
-                </button>
-                <h3>${movie.title}</h3>
-                <p>
-                ⭐ ${movie.vote_average.toFixed(1)}
-                </p>
-            </div>
-        `;
-        trendingMovies.appendChild(movieCard);
-    });
-}
-
-/* LOAD MOVIES */
-
+getHeroMovies();
 getTrendingMovies();
