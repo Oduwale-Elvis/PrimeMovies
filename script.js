@@ -157,7 +157,7 @@ window.addEventListener("click", (e) => {
 });
 
 /* TMDB API */
-const apiKey = "e0fef4758e1a3c3d72ba1b55682c7785";
+const apiKey = "377cb013b8deea82fb503557f890f139";
 const trendingMovies = document.getElementById("trendingMovies");
 /* FETCH TRENDING MOVIES */
 async function getTrendingMovies(){
