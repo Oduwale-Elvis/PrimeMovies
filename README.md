@@ -1,5 +1,6 @@
-<<<<<<< HEAD
-# Netflix-clone
-=======
-# PrimeMovies
->>>>>>> 5aa8ae34d9d15196666f7b99680ff2f1a5ee58bd
+# Prime Movie
+This is my Prime Movies website project built with HTML,CSS, and JAVASCRIPT.
+## Features
+-Movie listing UI
+-Responsive design
+-GitHub Pages deployment
