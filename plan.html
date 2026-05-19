@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prime Movies | Plans</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Netflix Sans, Arial, Helvetica, sans-serif;
+    background-color: #ffffff;
+    color: #141414;
+}
+
+/* HEADER */
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 60px;
+    border-bottom: 1px solid #e6e6e6;
+    background: #fff;
+}
+
+.header-one {
+    color: #080bab;
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.header-two {
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    align-items: right;
+}
+
+.header-two:hover {
+    text-decoration: underline;
+}
+
+/* STEP SECTION */
+.container-two {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+}
+
+.container-two p {
+    font-size: 0.9rem;
+    color: #777;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.container-two h4 {
+    font-size: 2rem;
+    font-weight: 800;
+    max-width: 600px;
+    margin: auto;
+}
+
+/* PRICING SECTION */
+.pricing-container {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 15px;
+    padding: 50px 40px;
+    flex-wrap: wrap;
+}
+
+/* CARD */
+.pricing-plan {
+    background: #fff;
+    width: 240px;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid #dcdcdc;
+    transition: 0.3s ease;
+    position: relative;
+}
+
+.pricing-plan:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+/* TOP GRADIENT */
+.plan-title {
+    background: linear-gradient(135deg, rgb(9, 5, 215), #b20710);
+    color: white;
+    padding: 25px 20px;
+    font-size: 1.7rem;
+    font-weight: bold;
+}
+
+/* PREMIUM SPECIAL */
+.pricing-plan:nth-child(4) .plan-title {
+    background: linear-gradient(135deg, #6d28d9, #e50914);
+}
+
+.popular {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: white;
+    color: #080bab;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+/* CONTENT */
+.plan-price,
+.plan-quality,
+.resolution,
+.device,
+.watch,
+.download,
+.audio {
+    padding: 18px 20px;
+}
+
+.up {
+    font-size: 0.85rem;
+    color: #737373;
+    margin-bottom: 6px;
+}
+
+.down {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #111;
+}
+
+.pricing-plan hr {
+    border: none;
+    border-top: 1px solid #ececec;
+}
+
+/* BUTTON */
+.select-btn {
+    display: block;
+    width: 85%;
+    margin: 25px auto;
+    padding: 14px;
+    border: none;
+    border-radius: 6px;
+    background: #080bab;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.select-btn:hover {
+    background: #0509eb;
+}
+
+/* PREMIUM BUTTON */
+.pricing-plan:nth-child(4) .select-btn {
+    background: #141414;
+}
+
+.pricing-plan:nth-child(4) .select-btn:hover {
+    background: #000;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1250px) {
+    .pricing-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .header-container {
+        padding: 20px;
+    }
+
+    .header-one {
+        font-size: 1.6rem;
+    }
+
+    .container-two h4 {
+        font-size: 1.5rem;
+    }
+
+    .pricing-container {
+        padding: 30px 20px;
+    }
+
+    .pricing-plan {
+        width: 100%;
+        max-width: 400px;
+    }
+}
+      
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <h3 class="header-one">PRIME MOVIES</h3>
+        <p class="header-two"><a href="login.html">Sign in</a></p>
+        
+    </div>
+
+    <div class="container-two">
+        <p>STEP 1 of 3</p>
+        <h4>Choose the plan that's right for you</h4>
+    </div>
+    <div class="pricing-container">
+        <div class="pricing-plan">
+            <div class="plan-title">Mobile</div>
+            <div class="plan-price">
+                <p class="up">Monthly Price</p>
+                <p class="down">NGN 2500</p>
+            </div>
+            <hr>
+            <div class="plan-quality">
+                <p class="up">Video and Sound quality</p>
+                <p class="down">Fair</p>
+            </div>
+            <hr>
+            <div class="resolution">
+                <p class="up">Resolution</p>
+                <p class="down">480p</p>
+            </div>
+            <hr>
+            <div class="device">
+                <p class="up">Supported Device</p>
+                <p class="down">Mobile Phone, tablet</p>
+            </div><hr>
+            <div class="watch">
+                <p class="up">Devices your house hold can watch at the same time</p>
+                <p class="down">1</p>
+            </div><hr>
+            <div class="download">
+                <p class="up">Download devices</p>
+                <p class="down">1</p>
+            </div>
+            <button class="select-btn">Choose Plan</button>
+        </div>
+        <div class="pricing-plan">
+            <div class="plan-title">Basic</div>
+            <div class="plan-price">
+                <p class="up">Monthly Price</p>
+                <p class="down">NGN 4000</p>
+            </div>
+            <hr>
+            <div class="plan-quality">
+                <p class="up">Video and Sound quality</p>
+                <p class="down">Good</p>
+            </div>
+            <hr>
+            <div class="resolution">
+                <p class="up">Resolution</p>
+                <p class="down">720p(HD)</p>
+            </div>
+            <hr>
+            <div class="device">
+                <p class="up">Supported Device</p>
+                <p class="down">TV,computer, mobile phone,tablet</p>
+            </div><hr>
+            <div class="watch">
+                <p class="up">Devices your house hold can watch at the same time</p>
+                <p class="down">1</p>
+            </div><hr>
+            <div class="download">
+                <p class="up">Download devices</p>
+                <p class="down">1</p>
+            </div>
+            <button class="select-btn">Choose Plan</button>
+        </div>
+        <div class="pricing-plan">
+            <div class="plan-title">Standard</div>
+            <div class="plan-price">
+                <p class="up">Monthly Price</p>
+                <p class="down">NGN 6500</p>
+            </div>
+            <hr>
+            <div class="plan-quality">
+                <p class="up">Video and Sound quality</p>
+                <p class="down">Great</p>
+            </div>
+            <hr>
+            <div class="resolution">
+                <p class="up">Resolution</p>
+                <p class="down">1080p(FULL HD)</p>
+            </div>
+            <hr>
+            <div class="device">
+                <p class="up">Supported Device</p>
+                <p class="down">TV, computer, mobile phone, tablet</p>
+            </div><hr>
+            <div class="watch">
+                <p class="up">Devices your house hold can watch at the same time</p>
+                <p class="down">2</p>
+            </div><hr>
+            <div class="download">
+                <p class="up">Download devices</p>
+                <p class="down">2</p>
+            </div>
+            <button class="select-btn">Choose Plan</button>
+        </div>
+        <div class="pricing-plan">
+            <div class="popular">Most Popular</div>
+            <div class="plan-title">Premium</div>
+            <div class="plan-price">
+                <p class="up">Monthly Price</p>
+                <p class="down">NGN 8500</p>
+            </div>
+            <hr>
+            <div class="plan-quality">
+                <p class="up">Video and Sound quality</p>
+                <p class="down">Best</p>
+            </div>
+            <hr>
+            <div class="resolution">
+                <p class="up">Resolution</p>
+                <p class="down">4K (Ultra HD) + HDR</p>
+            </div>
+            <hr>
+            <div class="audio">
+                <p class="up">Spatial audio(immersive sound)</p>
+                <p class="down">Included</p>
+            </div><hr>
+            <div class="device">
+                <p class="up">Supported Device</p>
+                <p class="down">TV, computers,mobile phone, tablet</p>
+            </div><hr>
+            <div class="watch">
+                <p class="up">Devices your house hold can watch at the same time</p>
+                <p class="down">4</p>
+            </div><hr>
+            <div class="download">
+                <p class="up">Download devices</p>
+                <p class="down">6</p>
+            </div>
+            <button class="select-btn">Choose Plan</button>
+        </div>
+
+    </div>
+</body>
+</html>
