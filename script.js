@@ -1,7 +1,7 @@
 /* ======================
    TMDB API
 ====================== */
-const apiKey = "377cb013b8deea82fb503557f890f139";
+const apiKey = "35f0bf40a7aebc0072f422a82833e4c6";
 
 const hero = document.querySelector(".hero");
 const heroTitle = document.getElementById("hero-title");
