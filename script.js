@@ -100,23 +100,30 @@ async function getTrendingMovies() {
    DISPLAY MOVIES
 ====================== */
 
+
 function showMovies(movies) {
     trendingMovies.innerHTML = "";
 
     movies.forEach(movie => {
+
         const card = document.createElement("div");
+
         card.classList.add("movie-card");
 
         card.innerHTML = `
             <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
             <div class="movie-overlay">
-                <button class="play-btn" data-trailer="">
+                <button class="play-btn">
                     ▶
                 </button>
                 <h3>${movie.title}</h3>
                 <p>⭐ ${movie.vote_average.toFixed(1)}</p>
             </div>
         `;
+
+        card.addEventListener("click", () => {
+            window.location.href = `movie.html?id=${movie.id}`;
+        });
 
         trendingMovies.appendChild(card);
     });
@@ -143,11 +150,16 @@ function displayMovieRow(container, movies) {
             </div>
         `;
 
+        card.addEventListener("click", () => {
+            window.location.href = `movie.html?id=${movie.id}`;
+        });
+
         container.appendChild(card);
 
     });
 
 }
+
 /*Popular Movies */
 async function getPopularMovies() {
 
