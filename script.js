@@ -9,6 +9,9 @@ const heroDescription = document.getElementById("hero-description");
 const heroTag = document.getElementById("hero-tag");
 
 const trendingMovies = document.getElementById("trendingMovies");
+const popularMovies = document.getElementById("popularMovies");
+const topRatedMovies = document.getElementById("topRatedMovies");
+const actionMovies = document.getElementById("actionMovies");
 const searchInput = document.getElementById("searchInput");
 const profileBtn = document.getElementById("profileBtn");
 const profileDropdown = document.getElementById("profileDropdown");
@@ -118,7 +121,93 @@ function showMovies(movies) {
         trendingMovies.appendChild(card);
     });
 }
+function displayMovieRow(container, movies) {
 
+    container.innerHTML = "";
+
+    movies.forEach(movie => {
+
+        const card = document.createElement("div");
+
+        card.classList.add("movie-card");
+
+        card.innerHTML = `
+            <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+
+            <div class="movie-overlay">
+                <button class="play-btn">▶</button>
+
+                <h3>${movie.title}</h3>
+
+                <p>⭐ ${movie.vote_average.toFixed(1)}</p>
+            </div>
+        `;
+
+        container.appendChild(card);
+
+    });
+
+}
+/*Popular Movies */
+async function getPopularMovies() {
+
+    try {
+
+        const res = await fetch(
+            `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`
+        );
+
+        const data = await res.json();
+
+        displayMovieRow(popularMovies, data.results);
+
+    } catch(err) {
+
+        console.error(err);
+
+    }
+
+}
+/*Top Rated Movies*/
+async function getTopRatedMovies() {
+
+    try {
+
+        const res = await fetch(
+            `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}`
+        );
+
+        const data = await res.json();
+
+        displayMovieRow(topRatedMovies, data.results);
+
+    } catch(err) {
+
+        console.error(err);
+
+    }
+
+}
+/*Action Movies*/
+async function getActionMovies() {
+
+    try {
+
+        const res = await fetch(
+            `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_genres=28`
+        );
+
+        const data = await res.json();
+
+        displayMovieRow(actionMovies, data.results);
+
+    } catch(err) {
+
+        console.error(err);
+
+    }
+
+}
 /* ======================
    SEARCH
 ====================== */
@@ -183,3 +272,6 @@ window.addEventListener("click", (e) => {
 
 getHeroMovies();
 getTrendingMovies();
+getPopularMovies();
+getTopRatedMovies();
+getActionMovies();
