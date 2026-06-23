@@ -287,3 +287,44 @@ getTrendingMovies();
 getPopularMovies();
 getTopRatedMovies();
 getActionMovies();
+
+import { auth } from "./firebase.js";
+
+import {
+    onAuthStateChanged,
+    signOut
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+onAuthStateChanged(auth, (user) => {
+
+    if(user){
+
+        profileBtn.innerHTML = `
+            <img
+                src="${user.photoURL}"
+                style="
+                    width:100%;
+                    height:100%;
+                    border-radius:50%;
+                    object-fit:cover;
+                "
+            >
+        `;
+
+    }
+
+});
+
+const logoutBtn =
+document.getElementById("logoutBtn");
+
+logoutBtn?.addEventListener("click",
+async () => {
+
+    await signOut(auth);
+
+    window.location.href =
+    "login.html";
+
+});
