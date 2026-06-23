@@ -1,3 +1,11 @@
+import { auth, db } from "./firebase.js";
+
+import {
+    doc,
+    setDoc
+}
+from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+
 const apiKey = "35f0bf40a7aebc0072f422a82833e4c6";
 
 const params = new URLSearchParams(window.location.search);
@@ -22,7 +30,8 @@ async function getMovieDetails() {
         `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}`
     );
 
-    const movie = await res.json();
+    window.currentMovie = await res.json();
+    const movie = window.currentMovie;
 
     // Backdrop
     movieHero.style.backgroundImage =
@@ -125,25 +134,45 @@ async function loadTrailer() {
 
     }
 }
-watchlistBtn.addEventListener("click", () => {
+watchlistBtn?.addEventListener("click", async () => {
 
-    let watchlist =
-        JSON.parse(
-            localStorage.getItem("watchlist")
-        ) || [];
+    const user = auth.currentUser;
 
-    if(!watchlist.includes(movieId)){
+    if (!user) {
 
-        watchlist.push(movieId);
+        alert("Please login first");
 
-        localStorage.setItem(
-            "watchlist",
-            JSON.stringify(watchlist)
+        window.location.href = "login.html";
+        return;
+    }
+
+    try {
+
+        await setDoc(
+            doc(
+                db,
+                "users",
+                user.uid,
+                "watchlist",
+                movieId
+            ),
+            {
+                movieId: currentMovie.id,
+                title: currentMovie.title,
+                poster: currentMovie.poster_path,
+                rating: currentMovie.vote_average,
+                addedAt: new Date().toISOString()
+            }
         );
 
         alert("Added to Watchlist");
-    }
-});
 
+    } catch(error) {
+
+        console.error(error);
+        alert("Failed to save watchlist");
+    }
+
+});
 getMovieDetails();
 loadTrailer();
