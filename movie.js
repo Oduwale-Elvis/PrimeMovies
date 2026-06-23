@@ -16,7 +16,6 @@ const similarMovies = document.getElementById("similarMovies");
 const watchTrailer = document.getElementById("watchTrailer");
 const watchlistBtn = document.getElementById("watchlistBtn");
 
-
 async function getMovieDetails() {
 
     const res = await fetch(

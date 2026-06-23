@@ -15,7 +15,7 @@
             <h2>Sign In</h2>
             <p class="subtitle">Login to continue watching</p>
 
-            <form action="#" method="post">
+            <form id="loginForm">
                 <div class="input-group">
                     <label for="email">Email:</label>
                     <input type="text" id="email" name="email" placeholder="Enter your email" required>
@@ -39,7 +39,7 @@
 
                 <button type="submit" class="login-btn">Sign In</button>
                 <div class="social-login">
-                    <button class="social-btn google">
+                    <button type="button" class="social-btn google" id="googleLogin">
                         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
                         Continue with Google
                     </button>
@@ -51,21 +51,6 @@
         </div>
     </div>
 
-   <script>
-    const password = document.getElementById("password");
-    const eye = document.getElementById("eye-icon");
-
-    eye.addEventListener("click", () => {
-        if (password.type === "password") {
-            password.type = "text";
-            eye.classList.remove("fa-eye");
-            eye.classList.add("fa-eye-slash");
-        } else {
-            password.type = "password";
-            eye.classList.remove("fa-eye-slash");
-            eye.classList.add("fa-eye");
-        }
-    });
-</script>
+   <script type="module" src="login.js"></script>
 </body>
 </html>
