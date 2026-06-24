@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prime Movies | TV Show Details</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="movie.css">
+</head>
+<body>
+
+<header class="navbar">
+    <a href="index.html" class="logo">
+        PRIME<span>MOVIES</span>
+    </a>
+
+    <a href="index.html" class="back-home">
+        ← Back Home
+    </a>
+</header>
+
+<section class="movie-hero" id="movieHero">
+
+    <div class="hero-overlay"></div>
+
+    <div class="movie-container">
+
+        <div class="poster-container">
+            <img id="moviePoster" src="" alt="Movie Poster">
+        </div>
+
+        <div class="movie-info">
+
+            <h1 id="movieTitle"></h1>
+
+            <div class="movie-meta">
+
+                <span id="movieRating"></span>
+
+                <span id="movieRelease"></span>
+
+                <span id="movieRuntime"></span>
+
+            </div>
+
+            <div id="movieGenres" class="genres"></div>
+
+            <p id="movieOverview"></p>
+
+            <div class="buttons">
+
+                <button id="watchTrailer" class="trailer-btn">
+                    ▶ Watch Trailer
+                </button>
+
+                <button id="watchlistBtn" class="watchlist-btn">
+                    + Add to Watchlist
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="similar-section">
+
+    <h2>Similar Movies</h2>
+
+    <div class="similar-movies" id="similarMovies"></div>
+
+</section>
+
+<script type ="module" src="tv.js"></script>
+
+</body>
+</html>
