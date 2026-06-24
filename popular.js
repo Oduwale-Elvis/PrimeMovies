@@ -40,6 +40,33 @@ function displayMovies(container, movies) {
 
 }
 
+function displayTVShows(container, shows) {
+
+    container.innerHTML = "";
+
+    shows.forEach(show => {
+
+        const card = document.createElement("div");
+
+        card.classList.add("movie-card");
+
+        card.innerHTML = `
+            <img src="https://image.tmdb.org/t/p/w500${show.poster_path}" alt="${show.name}">
+        `;
+
+        card.addEventListener("click", () => {
+
+            window.location.href =
+            `tv.html?id=${show.id}`;
+
+        });
+
+        container.appendChild(card);
+
+    });
+
+}
+
 async function getTrendingMovies() {
 
     const res = await fetch(
@@ -93,10 +120,10 @@ async function getPopularTVShows() {
 
     const data = await res.json();
 
-    displayMovies(
+    displayTVShows(
         popularTVShows,
         data.results
-    );
+);
 
 }
 getTrendingMovies();
