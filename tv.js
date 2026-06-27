@@ -2,34 +2,72 @@ import { auth, db } from "./firebase.js";
 
 import {
     doc,
-    setDoc
-}
-from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+    setDoc,
+    getDoc,
+    deleteDoc
+} from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
 const apiKey = "35f0bf40a7aebc0072f422a82833e4c6";
 
 const params = new URLSearchParams(window.location.search);
-
 const tvId = params.get("id");
 
+// Elements
 const tvHero = document.getElementById("movieHero");
 const tvPoster = document.getElementById("moviePoster");
 const tvTitle = document.getElementById("movieTitle");
 const tvRating = document.getElementById("movieRating");
 const tvRelease = document.getElementById("movieRelease");
-const tvOverview = document.getElementById("movieOverview");
 const tvRuntime = document.getElementById("movieRuntime");
 const tvGenres = document.getElementById("movieGenres");
+const tvOverview = document.getElementById("movieOverview");
+
 const similarMovies = document.getElementById("similarMovies");
+
 const watchTrailer = document.getElementById("watchTrailer");
 const watchlistBtn = document.getElementById("watchlistBtn");
 
-async function getTVDetails() {
 
-    if (!tvId) {
-        alert("Missing TV id");
-        return;
+// ----------------------
+// Watchlist Button State
+// ----------------------
+
+async function updateWatchlistButton() {
+
+    const user = auth.currentUser;
+
+    if (!user) return;
+
+    const showRef = doc(
+        db,
+        "users",
+        user.uid,
+        "watchlist",
+        String(tvId)
+    );
+
+    const snapshot = await getDoc(showRef);
+
+    if (snapshot.exists()) {
+
+        watchlistBtn.textContent = "✔ In Watchlist";
+        watchlistBtn.dataset.saved = "true";
+
+    } else {
+
+        watchlistBtn.textContent = "+ Add to Watchlist";
+        watchlistBtn.dataset.saved = "false";
+
     }
+
+}
+
+
+// ----------------------
+// TV Details
+// ----------------------
+
+async function getTVDetails() {
 
     try {
 
@@ -37,55 +75,45 @@ async function getTVDetails() {
             `https://api.themoviedb.org/3/tv/${tvId}?api_key=${apiKey}`
         );
 
-        if (!res.ok) {
-            throw new Error(`TMDB request failed: ${res.status}`);
-        }
+        const show = await res.json();
 
-        window.currentShow = await res.json();
+        window.currentShow = show;
 
-        const show = window.currentShow;
-
-        // Backdrop
         tvHero.style.backgroundImage =
             `url(https://image.tmdb.org/t/p/original${show.backdrop_path})`;
 
-        // Poster
         tvPoster.src =
             `https://image.tmdb.org/t/p/w500${show.poster_path}`;
 
-        // Title
         tvTitle.textContent = show.name;
 
-        // Rating
         tvRating.textContent =
             `⭐ ${show.vote_average.toFixed(1)}`;
 
-        // Release Date
         tvRelease.textContent =
             `📅 ${show.first_air_date}`;
 
-        // Runtime / Seasons
-        const runtimeMinutes =
-            show.episode_run_time &&
-            show.episode_run_time.length > 0
-                ? show.episode_run_time[0]
-                : null;
+        if (show.episode_run_time.length > 0) {
 
-        tvRuntime.textContent =
-            runtimeMinutes
-                ? `⏱ ${runtimeMinutes} mins`
-                : `📺 ${show.number_of_seasons} Seasons`;
+            tvRuntime.textContent =
+                `⏱ ${show.episode_run_time[0]} mins`;
 
-        // Overview
+        } else {
+
+            tvRuntime.textContent =
+                `📺 ${show.number_of_seasons} Seasons`;
+
+        }
+
         tvOverview.textContent =
-            show.overview || "No overview available.";
+            show.overview;
 
-        // Genres
         tvGenres.innerHTML = "";
 
         show.genres.forEach(genre => {
 
-            const span = document.createElement("span");
+            const span =
+            document.createElement("span");
 
             span.classList.add("genre");
 
@@ -95,18 +123,26 @@ async function getTVDetails() {
 
         });
 
-        await getSimilarMovies();
+        getSimilarTV();
 
-    } catch(error) {
+    }
+
+    catch(error){
 
         console.error(error);
-
-        alert("Failed to load TV show details");
 
     }
 
 }
-async function getSimilarMovies() {
+
+
+
+// ----------------------
+// Similar TV Shows
+// ----------------------
+
+async function getSimilarTV() {
+
     const res = await fetch(
         `https://api.themoviedb.org/3/tv/${tvId}/similar?api_key=${apiKey}`
     );
@@ -115,25 +151,26 @@ async function getSimilarMovies() {
 
     similarMovies.innerHTML = "";
 
-    data.results.slice(0, 10).forEach(show => {
+    data.results.slice(0,10).forEach(show=>{
 
-        const card = document.createElement("img");
+        if(!show.poster_path) return;
 
-        if (!show.poster_path) return;
+        const card =
+        document.createElement("img");
 
         card.src =
         `https://image.tmdb.org/t/p/w300${show.poster_path}`;
 
-        card.alt = show.name;
+        card.alt =
+        show.name;
 
+        card.style.cursor =
+        "pointer";
 
-        card.style.cursor = "pointer";
+        card.addEventListener("click",()=>{
 
-        card.addEventListener("click", () => {
-
-           window.location.href =
-                `tv.html?id=${show.id}`;
-
+            window.location.href =
+            `tv.html?id=${show.id}`;
 
         });
 
@@ -142,74 +179,152 @@ async function getSimilarMovies() {
     });
 
 }
-async function loadTrailer() {
-    try {
-        const res = await fetch(
-            `https://api.themoviedb.org/3/tv/${tvId}/videos?api_key=${apiKey}`
-        );
-        if (!res.ok) throw new Error(`TMDB trailer request failed: ${res.status}`);
 
-        const data = await res.json();
 
-        const trailer = data.results.find(
-            video =>
-                video.type === "Trailer" &&
-                video.site === "YouTube"
-        );
 
-        if (trailer) {
-            watchTrailer?.addEventListener("click", () => {
-                window.open(
-                    `https://www.youtube.com/watch?v=${trailer.key}`,
-                    "_blank"
-                );
-            });
-        }
-    } catch (e) {
-        console.error(e);
+// ----------------------
+// Trailer
+// ----------------------
+
+async function loadTrailer(){
+
+    const res = await fetch(
+        `https://api.themoviedb.org/3/tv/${tvId}/videos?api_key=${apiKey}`
+    );
+
+    const data = await res.json();
+
+    const trailer =
+    data.results.find(video=>
+
+        video.type==="Trailer" &&
+        video.site==="YouTube"
+
+    );
+
+    if(trailer){
+
+        watchTrailer.onclick=()=>{
+
+            window.open(
+
+                `https://www.youtube.com/watch?v=${trailer.key}`,
+
+                "_blank"
+
+            );
+
+        };
+
     }
+
 }
-watchlistBtn?.addEventListener("click", async () => {
-    const user = auth.currentUser;
 
-    if (!user) {
-        alert("Please login first");
-        window.location.href = "login.html";
+
+
+// ----------------------
+// Watchlist
+// ----------------------
+
+watchlistBtn.addEventListener("click", async ()=>{
+
+    const user =
+    auth.currentUser;
+
+    if(!user){
+
+        window.location.href="login.html";
+
         return;
+
     }
 
-    const show = window.currentShow;
-    if (!show) {
-        alert("Loading show details...");
+    const showRef = doc(
+
+        db,
+
+        "users",
+
+        user.uid,
+
+        "watchlist",
+
+        String(tvId)
+
+    );
+
+
+    // Remove
+
+    if(watchlistBtn.dataset.saved==="true"){
+
+        await deleteDoc(showRef);
+
+        watchlistBtn.textContent =
+        "+ Add to Watchlist";
+
+        watchlistBtn.dataset.saved =
+        "false";
+
         return;
+
     }
 
-    try {
-        await setDoc(
-            doc(
-                db,
-                "users",
-                user.uid,
-                "watchlist",
-                String(tvId)
-            ),
-            {
-                tvId: show.id,
-                title: show.name,
-                poster: show.poster_path,
-                rating: show.vote_average,
-                type: "tv",
-                addedAt: new Date().toISOString()
-            }
-        );
 
-        alert("Added to Watchlist");
+    // Add
 
-    } catch (error) {
-        console.error(error);
-        alert("Failed to save watchlist");
+    const show =
+    window.currentShow;
+
+    if(!show){
+
+        alert("Still loading...");
+
+        return;
+
+    }
+
+    await setDoc(showRef,{
+
+        tvId:show.id,
+
+        title:show.name,
+
+        poster:show.poster_path,
+
+        rating:show.vote_average,
+
+        type:"tv",
+
+        addedAt:new Date().toISOString()
+
+    });
+
+
+    watchlistBtn.textContent =
+    "✔ In Watchlist";
+
+    watchlistBtn.dataset.saved =
+    "true";
+
+});
+
+
+
+// ----------------------
+// Start
+// ----------------------
+
+getTVDetails();
+
+loadTrailer();
+
+auth.onAuthStateChanged(user=>{
+
+    if(user){
+
+        updateWatchlistButton();
+
     }
 
 });
-getTVDetails();
-loadTrailer();

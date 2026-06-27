@@ -67,6 +67,41 @@ body{
     color:#ccc;
 }
 
+.remove-btn{
+    width: 100%;
+    margin-top: 12px;
+    padding: 10px;
+
+    background: #e50914;
+
+    color: #fff;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .3s;
+}
+
+.remove-btn:hover{
+
+    background: #ff2d3d;
+
+    transform: scale(1.03);
+
+}
+
+.remove-btn:active{
+
+    transform: scale(.96);
+
+}
 @media (max-width: 768px){
 
     .navbar{

@@ -2,78 +2,141 @@ import { auth, db } from "./firebase.js";
 
 import {
     doc,
-    setDoc
+    setDoc,
+    getDoc,
+    deleteDoc
 }
 from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
 const apiKey = "35f0bf40a7aebc0072f422a82833e4c6";
 
 const params = new URLSearchParams(window.location.search);
-
 const movieId = params.get("id");
 
+// Elements
 const movieHero = document.getElementById("movieHero");
 const moviePoster = document.getElementById("moviePoster");
 const movieTitle = document.getElementById("movieTitle");
 const movieRating = document.getElementById("movieRating");
 const movieRelease = document.getElementById("movieRelease");
-const movieOverview = document.getElementById("movieOverview");
 const movieRuntime = document.getElementById("movieRuntime");
 const movieGenres = document.getElementById("movieGenres");
+const movieOverview = document.getElementById("movieOverview");
+
 const similarMovies = document.getElementById("similarMovies");
+
 const watchTrailer = document.getElementById("watchTrailer");
 const watchlistBtn = document.getElementById("watchlistBtn");
 
-async function getMovieDetails() {
 
-    const res = await fetch(
-        `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}`
+// ----------------------
+// Watchlist Button State
+// ----------------------
+
+async function updateWatchlistButton() {
+
+    const user = auth.currentUser;
+
+    if (!user) return;
+
+    const movieRef = doc(
+        db,
+        "users",
+        user.uid,
+        "watchlist",
+        String(movieId)
     );
 
-    window.currentMovie = await res.json();
-    const movie = window.currentMovie;
+    const snapshot = await getDoc(movieRef);
 
-    // Backdrop
-    movieHero.style.backgroundImage =
-        `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`;
+    if (snapshot.exists()) {
 
-    // Poster
-    moviePoster.src =
-        `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+        watchlistBtn.textContent = "✔ In Watchlist";
+        watchlistBtn.dataset.saved = "true";
 
-    // Info
-    movieTitle.textContent = movie.title;
+    } else {
 
-    movieRating.textContent =
-        `⭐ ${movie.vote_average.toFixed(1)}`;
+        watchlistBtn.textContent = "+ Add to Watchlist";
+        watchlistBtn.dataset.saved = "false";
 
-    movieRelease.textContent =
-        `📅 ${movie.release_date}`;
+    }
 
-    movieRuntime.textContent =
-        `⏱ ${movie.runtime} mins`;
-
-    movieOverview.textContent =
-        movie.overview;
-
-    // Genres
-    movieGenres.innerHTML = "";
-
-    movie.genres.forEach(genre => {
-
-        const span = document.createElement("span");
-
-        span.classList.add("genre");
-
-        span.textContent = genre.name;
-
-        movieGenres.appendChild(span);
-
-    });
-
-    // Load similar movies
-    getSimilarMovies();
 }
+
+
+// ----------------------
+// Movie Details
+// ----------------------
+
+async function getMovieDetails() {
+
+    try {
+
+        const res = await fetch(
+            `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}`
+        );
+
+        if (!res.ok) {
+            throw new Error("Failed to fetch movie.");
+        }
+
+        const movie = await res.json();
+
+        window.currentMovie = movie;
+
+        movieHero.style.backgroundImage =
+            `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`;
+
+        moviePoster.src =
+            `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+
+        movieTitle.textContent = movie.title;
+
+        movieRating.textContent =
+            `⭐ ${movie.vote_average.toFixed(1)}`;
+
+        movieRelease.textContent =
+            `📅 ${movie.release_date}`;
+
+        movieRuntime.textContent =
+            `⏱ ${movie.runtime} mins`;
+
+        movieOverview.textContent =
+            movie.overview || "No overview available.";
+
+        movieGenres.innerHTML = "";
+
+        movie.genres.forEach(genre => {
+
+            const span = document.createElement("span");
+
+            span.classList.add("genre");
+
+            span.textContent = genre.name;
+
+            movieGenres.appendChild(span);
+
+        });
+
+        getSimilarMovies();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert("Failed to load movie.");
+
+    }
+
+}
+
+
+// ----------------------
+// Similar Movies
+// ----------------------
+
 async function getSimilarMovies() {
 
     const res = await fetch(
@@ -85,6 +148,8 @@ async function getSimilarMovies() {
     similarMovies.innerHTML = "";
 
     data.results.slice(0, 10).forEach(movie => {
+
+        if (!movie.poster_path) return;
 
         const card = document.createElement("img");
 
@@ -107,72 +172,135 @@ async function getSimilarMovies() {
     });
 
 }
+
+
+// ----------------------
+// Trailer
+// ----------------------
+
 async function loadTrailer() {
 
-    const res = await fetch(
-        `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apiKey}`
-    );
+    try {
 
-    const data = await res.json();
+        const res = await fetch(
+            `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apiKey}`
+        );
 
-    const trailer = data.results.find(
-        video =>
+        const data = await res.json();
+
+        const trailer = data.results.find(video =>
+
             video.type === "Trailer" &&
             video.site === "YouTube"
-    );
 
-    if(trailer){
+        );
 
-        watchTrailer.addEventListener("click", () => {
+        if (trailer) {
 
-            window.open(
-                `https://www.youtube.com/watch?v=${trailer.key}`,
-                "_blank"
-            );
+            watchTrailer.onclick = () => {
 
-        });
+                window.open(
+                    `https://www.youtube.com/watch?v=${trailer.key}`,
+                    "_blank"
+                );
+
+            };
+
+        }
 
     }
+
+    catch (error) {
+
+        console.error(error);
+
+    }
+
 }
+
+
+// ----------------------
+// Watchlist
+// ----------------------
+
 watchlistBtn?.addEventListener("click", async () => {
 
     const user = auth.currentUser;
 
     if (!user) {
 
-        alert("Please login first");
-
         window.location.href = "login.html";
         return;
+
     }
 
-    try {
+    const movieRef = doc(
+        db,
+        "users",
+        user.uid,
+        "watchlist",
+        String(movieId)
+    );
 
-        await setDoc(
-            doc(
-                db,
-                "users",
-                user.uid,
-                "watchlist",
-                movieId
-            ),
-            {
-                movieId: currentMovie.id,
-                title: currentMovie.title,
-                poster: currentMovie.poster_path,
-                rating: currentMovie.vote_average,
-                addedAt: new Date().toISOString()
-            }
-        );
+    // Remove
+    if (watchlistBtn.dataset.saved === "true") {
 
-        alert("Added to Watchlist");
+        await deleteDoc(movieRef);
 
-    } catch(error) {
+        watchlistBtn.textContent =
+            "+ Add to Watchlist";
 
-        console.error(error);
-        alert("Failed to save watchlist");
+        watchlistBtn.dataset.saved =
+            "false";
+
+        return;
+
+    }
+
+    // Add
+    const movie = window.currentMovie;
+
+    if (!movie) {
+
+        alert("Movie is still loading...");
+        return;
+
+    }
+
+    await setDoc(movieRef, {
+
+        movieId: movie.id,
+        title: movie.title,
+        poster: movie.poster_path,
+        rating: movie.vote_average,
+        type: "movie",
+        addedAt: new Date().toISOString()
+
+    });
+
+    watchlistBtn.textContent =
+        "✔ In Watchlist";
+
+    watchlistBtn.dataset.saved =
+        "true";
+
+});
+
+
+// ----------------------
+// Start
+// ----------------------
+
+getMovieDetails();
+
+loadTrailer();
+
+auth.onAuthStateChanged((user) => {
+
+    if (user) {
+
+        updateWatchlistButton();
+
     }
 
 });
-getMovieDetails();
-loadTrailer();

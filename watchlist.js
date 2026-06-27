@@ -63,7 +63,7 @@ async function loadWatchlist() {
             <p>⭐ ${item.rating.toFixed(1)}</p>
 
             <button class="remove-btn">
-                Remove
+                🗑 Remove
             </button>
         `;
 
