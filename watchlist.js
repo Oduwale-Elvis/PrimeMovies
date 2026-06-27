@@ -2,9 +2,10 @@ import { auth, db } from "./firebase.js";
 
 import {
     collection,
-    getDocs
-}
-from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+    getDocs,
+    deleteDoc,
+    doc
+} from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
 const watchlistGrid =
 document.getElementById("watchlistGrid");
@@ -31,9 +32,20 @@ async function loadWatchlist() {
 
     watchlistGrid.innerHTML = "";
 
-    snapshot.forEach(doc => {
+    if (snapshot.empty) {
 
-        const movie = doc.data();
+        watchlistGrid.innerHTML = `
+            <h2 style="color:white;text-align:center;width:100%;">
+                Your Watchlist is Empty
+            </h2>
+        `;
+
+        return;
+    }
+
+    snapshot.forEach((docSnap) => {
+
+        const item = docSnap.data();
 
         const card =
         document.createElement("div");
@@ -41,17 +53,82 @@ async function loadWatchlist() {
         card.classList.add("movie-card");
 
         card.innerHTML = `
-            <img src="https://image.tmdb.org/t/p/w500${movie.poster}" alt="${movie.title}">
+            <img
+                src="https://image.tmdb.org/t/p/w500${item.poster}"
+                alt="${item.title}"
+            >
 
-            <h3>${movie.title}</h3>
+            <h3>${item.title}</h3>
 
-            <p>⭐ ${movie.rating.toFixed(1)}</p>
+            <p>⭐ ${item.rating.toFixed(1)}</p>
+
+            <button class="remove-btn">
+                Remove
+            </button>
         `;
 
+        // Open Movie / TV
         card.addEventListener("click", () => {
 
-            window.location.href =
-            `movie.html?id=${movie.movieId}`;
+            if (item.type === "tv") {
+
+                window.location.href =
+                    `tv.html?id=${item.tvId}`;
+
+            } else {
+
+                window.location.href =
+                    `movie.html?id=${item.movieId}`;
+
+            }
+
+        });
+
+        // Remove Button
+        const removeBtn =
+        card.querySelector(".remove-btn");
+
+        removeBtn.addEventListener("click", async (e) => {
+
+            e.stopPropagation();
+
+            const confirmDelete =
+            confirm(`Remove "${item.title}" from your watchlist?`);
+
+            if (!confirmDelete) return;
+
+            try {
+
+                await deleteDoc(
+                    doc(
+                        db,
+                        "users",
+                        user.uid,
+                        "watchlist",
+                        docSnap.id
+                    )
+                );
+
+                card.remove();
+
+                // Show empty message if last item removed
+                if (watchlistGrid.children.length === 0) {
+
+                    watchlistGrid.innerHTML = `
+                        <h2 style="color:white;text-align:center;width:100%;">
+                            Your Watchlist is Empty
+                        </h2>
+                    `;
+
+                }
+
+            } catch(error) {
+
+                console.error(error);
+
+                alert("Failed to remove from Watchlist.");
+
+            }
 
         });
 
@@ -63,8 +140,14 @@ async function loadWatchlist() {
 
 auth.onAuthStateChanged((user) => {
 
-    if(user){
+    if (user) {
+
         loadWatchlist();
+
+    } else {
+
+        window.location.href = "login.html";
+
     }
 
 });
