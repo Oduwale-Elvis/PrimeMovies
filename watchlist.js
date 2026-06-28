@@ -9,7 +9,7 @@ import {
 
 const watchlistGrid =
 document.getElementById("watchlistGrid");
-
+const emptyMessage = document.getElementById("emptyMessage");
 async function loadWatchlist() {
 
     const user = auth.currentUser;
@@ -34,15 +34,15 @@ async function loadWatchlist() {
 
     if (snapshot.empty) {
 
-        watchlistGrid.innerHTML = `
-            <h2 style="color:white;text-align:center;width:100%;">
-                Your Watchlist is Empty
-            </h2>
-        `;
+        watchlistGrid.style.display = "none";
+
+        emptyMessage.style.display = "flex";
 
         return;
     }
 
+    watchlistGrid.style.display = "grid";
+    emptyMessage.style.display = "none";
     snapshot.forEach((docSnap) => {
 
         const item = docSnap.data();

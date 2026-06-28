@@ -252,7 +252,11 @@ window.addEventListener("click", (e) => {
         profileDropdown.classList.remove("active");
     }
 });
+document.addEventListener("scroll", () => {
 
+    profileDropdown?.classList.remove("active");
+
+});
 /* ======================
    TRAILER MODAL
 ====================== */
