@@ -172,3 +172,36 @@ body{
     }
 
 }
+
+.watchlist-header{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:30px;
+
+}
+
+#clearHistoryBtn{
+
+    background:#e50914;
+    color:white;
+
+    border:none;
+
+    padding:12px 20px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+#clearHistoryBtn:hover{
+
+    background:#c40812;
+
+}

@@ -1,0 +1,30 @@
+/* ========== LIGHT MODE ========== */
+
+.light-mode body{
+    background: #f5f5f5;
+    color: #111;
+}
+
+.light-mode .navbar{
+    background: #ffffff;
+}
+
+.light-mode .logo{
+    color: #111;
+}
+
+.light-mode .logo span{
+    color: #00a8ff;
+}
+
+.light-mode .back-btn,
+.light-mode a{
+    color: #111;
+}
+
+.light-mode .settings-card,
+.light-mode .profile-card,
+.light-mode .watchlist-card{
+    background: #ffffff;
+    color: #111;
+}

@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Watchlist</title>
-    <link rel="icon" type="image/png" href="favicon.png">
+    <title>PrimeMovies | Recently Viewed</title>
+
+    <link rel="icon" href="favicon.png">
     <link rel="stylesheet" href="watchlist.css">
     <link rel="stylesheet" href="theme.css">
 </head>
@@ -24,31 +25,38 @@
 
 <section class="watchlist-section">
 
-    <h1>🎬 My Watchlist</h1>
+    <div class="watchlist-header">
 
-    <div id="watchlistGrid" class="watchlist-grid"></div>
+        <h1>🕒 Recently Viewed</h1>
 
-    <div id="emptyMessage" class="empty-message">
-
-        <div class="empty-icon">🎬</div>
-
-        <h2>Your Watchlist is Empty</h2>
-
-        <p>
-            Save your favourite Movies,
-            TV Shows and Anime here so
-            you can watch them later.
-        </p>
-
-        <a href="index.html" class="browse-btn">
-            Browse Movies
-        </a>
+        <button id="clearHistoryBtn">
+            Clear History
+        </button>
 
     </div>
 
+    <div class="watchlist-grid" id="historyGrid"></div>
+
+    <div id="emptyHistory" class="empty-message">
+
+        <div class="empty-icon">🎬</div>
+
+        <h2>No Recently Viewed Content</h2>
+
+        <p>
+            Movies, TV Shows and Anime you open
+            will appear here.
+        </p>
+
+        <a href="index.html" class="browse-btn">
+            Browse Content
+        </a>
+
+    </div>
+    
 </section>
-<script src="theme.js"></script>
-<script type="module" src="watchlist.js"></script>
+
+<script type="module" src="history.js"></script>
 
 </body>
 </html>

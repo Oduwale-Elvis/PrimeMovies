@@ -62,7 +62,38 @@ async function updateWatchlistButton() {
     }
 
 }
+async function saveToHistory() {
 
+    const user = auth.currentUser;
+
+    if (!user) return;
+
+    const movie = window.currentMovie;
+
+    if (!movie) return;
+
+    await setDoc(
+
+        doc(
+            db,
+            "users",
+            user.uid,
+            "history",
+            String(movie.id)
+        ),
+
+        {
+            movieId: movie.id,
+            title: movie.title,
+            poster: movie.poster_path,
+            rating: movie.vote_average,
+            type: "movie",
+            viewedAt: new Date().toISOString()
+        }
+
+    );
+
+}
 
 // ----------------------
 // Movie Details
@@ -117,7 +148,7 @@ async function getMovieDetails() {
             movieGenres.appendChild(span);
 
         });
-
+        saveToHistory();
         getSimilarMovies();
 
     }

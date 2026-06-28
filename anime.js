@@ -9,6 +9,39 @@ document.getElementById("popularAnime");
 const topRatedAnime =
 document.getElementById("topRatedAnime");
 
+async function saveToHistory() {
+
+    const user = auth.currentUser;
+
+    if (!user) return;
+
+    const anime = window.currentShow;
+
+    if (!anime) return;
+
+    await setDoc(
+
+        doc(
+            db,
+            "users",
+            user.uid,
+            "history",
+            String(anime.id)
+        ),
+
+        {
+            animeId: anime.id,
+            title: anime.name,
+            poster: anime.poster_path,
+            rating: anime.vote_average,
+            type: "anime",
+            viewedAt: new Date().toISOString()
+        }
+
+    );
+
+}
+
 function displayAnime(container, shows) {
 
     container.innerHTML = "";
@@ -87,3 +120,4 @@ async function getTopRatedAnime() {
 getTrendingAnime();
 getPopularAnime();
 getTopRatedAnime();
+saveToHistory();

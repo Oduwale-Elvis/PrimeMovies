@@ -61,6 +61,38 @@ async function updateWatchlistButton() {
     }
 
 }
+async function saveToHistory() {
+
+    const user = auth.currentUser;
+
+    if (!user) return;
+
+    const show = window.currentShow;
+
+    if (!show) return;
+
+    await setDoc(
+
+        doc(
+            db,
+            "users",
+            user.uid,
+            "history",
+            String(show.id)
+        ),
+
+        {
+            tvId: show.id,
+            title: show.name,
+            poster: show.poster_path,
+            rating: show.vote_average,
+            type: "tv",
+            viewedAt: new Date().toISOString()
+        }
+
+    );
+
+}
 
 
 // ----------------------
@@ -122,8 +154,8 @@ async function getTVDetails() {
             tvGenres.appendChild(span);
 
         });
-
         getSimilarTV();
+        saveToHistory();
 
     }
 
