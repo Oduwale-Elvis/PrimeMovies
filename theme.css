@@ -36,8 +36,6 @@
     color:#111;
 }
 
-/* ===== SEARCH BAR ===== */
-/* Keep the same dark background */
 
 .light-mode .search-box{
     /* background: #ffffff;*/ 
@@ -145,100 +143,89 @@
 }
 
 .search-item{
-
     display:flex;
-
     align-items:center;
-
     gap:15px;
-
     padding:12px;
-
     cursor:pointer;
-
     transition:.3s;
-
 }
 
 .search-item:hover{
-
     background:#2b2b2b;
-
 }
 
 .search-item img{
-
     width:50px;
-
     border-radius:8px;
-
 }
 
 .search-info h4{
-
     color:white;
-
     margin-bottom:4px;
-
 }
 
 .search-info p{
-
     color:#aaa;
-
     font-size:.85rem;
-
 }
 /* ===========================
    Mobile Search
 =========================== */
 
 @media (max-width: 768px){
-
     .search-results{
-
         position:fixed;
-
         top:70px;
-
         left:50%;
-
         transform:translateX(-50%);
-
         width:95%;
-
         max-width:400px;
-
         right:auto;
-
         border-radius:15px;
-
         max-height:65vh;
-
     }
 
     .search-item{
-
         padding:12px;
-
     }
 
     .search-item img{
-
         width:55px;
-
     }
 
     .search-info h4{
-
         font-size:15px;
-
     }
 
     .search-info p{
-
         font-size:13px;
-
     }
+}
+/* MOVIE TEXT */
 
+.light-mode .movie-overlay h3{
+    font-size:1.1rem;
+    margin-bottom:6px;
+    color: #f3f3f3;
+}
+
+.light-mode .movie-overlay p{
+    font-size:0.85rem;
+    color:#fff;
+}
+
+.light-mode .hero h1{
+    font-size:4rem;
+    margin-bottom:18px;
+    line-height:1;
+    color: #ddd;
+}
+
+.light-mode .hero-text{
+    font-size:1.1rem;
+    color:#ddd;
+    line-height:1.7;
+    margin-bottom:25px;
+    max-width:550px;
 }
