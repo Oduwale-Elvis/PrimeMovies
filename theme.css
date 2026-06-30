@@ -1,30 +1,132 @@
-/* ========== LIGHT MODE ========== */
+/* ==========================================
+   PRIME MOVIES - LIGHT THEME
+========================================== */
+
+/* ===== GENERAL ===== */
 
 .light-mode body{
-    background: #f5f5f5;
-    color: #111;
+    background:#f5f5f5;
+    color:#111;
 }
 
+/* ===== NAVBAR ===== */
+
 .light-mode .navbar{
-    background: #ffffff;
+    background:#ffffff;
+    border-bottom:1px solid #e5e5e5;
 }
 
 .light-mode .logo{
-    color: #111;
+    color:#111;
 }
 
 .light-mode .logo span{
-    color: #00a8ff;
+    color:#00a8ff;
 }
 
-.light-mode .back-btn,
-.light-mode a{
+.light-mode .nav-links a{
+    color:#111;
+}
+
+.light-mode .nav-links a:hover{
+    color:#00a8ff;
+}
+
+.light-mode .back-btn{
+    color:#111;
+}
+
+/* ===== SEARCH BAR ===== */
+/* Keep the same dark background */
+
+.light-mode .search-box{
+    /* background: #ffffff;*/ 
+    border: 1px solid #111;
+    border-radius: 25px;
+    position:relative;
+}
+
+.light-mode .search-box input{
+    padding:11px 18px;
+    border:none;
+    outline:none;
+    border-radius:25px;
+    background:#ffffff;
     color: #111;
+    width:220px;
+    border:1px solid rgba(255,255,255,0.08);
+    transition:0.3s;
 }
 
-.light-mode .settings-card,
-.light-mode .profile-card,
+.light-mode .search-box input::placeholder{
+    color: #666;
+}
+
+/* ===== PROFILE DROPDOWN ===== */
+
+.light-mode .profile-dropdown{
+    background:#ffffff;
+    border:1px solid #ddd;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+}
+
+.light-mode .profile-dropdown a{
+    color:#111;
+}
+
+.light-mode .profile-dropdown a:hover{
+    background:#f3f3f3;
+}
+
+/* ===== SETTINGS ===== */
+
+.light-mode .settings-card{
+    background:#ffffff;
+    color:#111;
+}
+
+/* ===== PROFILE ===== */
+
+.light-mode .profile-card{
+    background:#ffffff;
+    color:#111;
+}
+
+/* ===== WATCHLIST ===== */
+
 .light-mode .watchlist-card{
-    background: #ffffff;
-    color: #111;
+    background:#ffffff;
+    color:#111;
+}
+
+.light-mode .empty-watchlist{
+    color:#555;
+}
+
+/* ===== HISTORY ===== */
+
+.light-mode .history-card{
+    background:#ffffff;
+    color:#111;
+}
+
+/* ===== MOVIE CARDS ===== */
+
+.light-mode .movie-card h3,
+.light-mode .movie-card p{
+    color:#111;
+}
+
+/* ===== SECTION TITLES ===== */
+
+.light-mode h1,
+.light-mode h2,
+.light-mode h3{
+    color:#111;
+}
+
+/* ===== BUTTONS ===== */
+
+.light-mode button{
+    color:inherit;
 }
