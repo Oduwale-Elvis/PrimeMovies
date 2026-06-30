@@ -617,29 +617,17 @@ body {
     border:none;
 }
 .search-results{
-
     position:absolute;
-
-    top:80px;
-
-    right:120px;
-
+    top:75px;
+    right:20px;
     width:350px;
-
     max-height:450px;
-
     overflow-y:auto;
-
     background:#1b1b1b;
-
     border-radius:12px;
-
     display:none;
-
     z-index:9999;
-
     box-shadow:0 10px 30px rgba(0,0,0,.4);
-
 }
 
 .search-item{
@@ -685,5 +673,58 @@ body {
     color:#aaa;
 
     font-size:.85rem;
+
+}
+/* ===========================
+   Mobile Search
+=========================== */
+
+@media (max-width: 768px){
+
+    .search-results{
+
+        position:fixed;
+
+        top:70px;
+
+        left:50%;
+
+        transform:translateX(-50%);
+
+        width:95%;
+
+        max-width:400px;
+
+        right:auto;
+
+        border-radius:15px;
+
+        max-height:65vh;
+
+    }
+
+    .search-item{
+
+        padding:12px;
+
+    }
+
+    .search-item img{
+
+        width:55px;
+
+    }
+
+    .search-info h4{
+
+        font-size:15px;
+
+    }
+
+    .search-info p{
+
+        font-size:13px;
+
+    }
 
 }
