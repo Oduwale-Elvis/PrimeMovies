@@ -130,3 +130,74 @@
 .light-mode button{
     color:inherit;
 }
+.search-results{
+
+    position:absolute;
+
+    top:80px;
+
+    right:120px;
+
+    width:350px;
+
+    max-height:450px;
+
+    overflow-y:auto;
+
+    background:#1b1b1b;
+
+    border-radius:12px;
+
+    display:none;
+
+    z-index:9999;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.4);
+
+}
+
+.search-item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:12px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.search-item:hover{
+
+    background:#2b2b2b;
+
+}
+
+.search-item img{
+
+    width:50px;
+
+    border-radius:8px;
+
+}
+
+.search-info h4{
+
+    color:white;
+
+    margin-bottom:4px;
+
+}
+
+.search-info p{
+
+    color:#aaa;
+
+    font-size:.85rem;
+
+}
