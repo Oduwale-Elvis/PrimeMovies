@@ -119,3 +119,22 @@ input:checked + .slider::before{
     color:#111;
 
 }
+
+@media (max-width: 768px){
+
+    .navbar{
+        padding:15px 20px;
+        justify-content:space-between;
+    }
+
+    .logo{
+        font-size:1.3rem;
+        max-width:60%;
+    }
+
+    .back-home{
+        font-size:0.9rem;
+        text-align:right;
+    }
+
+}
