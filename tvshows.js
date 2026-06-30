@@ -17,6 +17,13 @@ function displayShows(container, shows) {
         card.classList.add("movie-card");
         card.innerHTML = `
             <img src="https://image.tmdb.org/t/p/w500${show.poster_path}" alt="${show.name}">
+            <div class="movie-overlay">
+                <button class="play-btn">▶</button>
+
+                <h3>${show.name}</h3>
+
+                <p>⭐ ${show.vote_average.toFixed(1)}</p>
+            </div>
         `;
         card.addEventListener("click", () => {
             window.location.href =

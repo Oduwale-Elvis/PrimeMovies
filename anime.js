@@ -5,8 +5,8 @@ const searchInput = document.getElementById("searchInput");
 const trendingAnime =
 document.getElementById("trendingAnime");
 
-const popularAnime =
-document.getElementById("popularAnime");
+// const popularAnime =
+// document.getElementById("popularAnime");
 
 const topRatedAnime =
 document.getElementById("topRatedAnime");
@@ -59,6 +59,13 @@ function displayAnime(container, shows) {
 
         card.innerHTML = `
             <img src="https://image.tmdb.org/t/p/w500${show.poster_path}">
+            <div class="movie-overlay">
+                <button class="play-btn">▶</button>
+
+                <h3>${show.name}</h3>
+
+                <p>⭐ ${show.vote_average.toFixed(1)}</p>
+            </div>
         `;
 
         card.addEventListener("click", () => {
@@ -89,20 +96,20 @@ async function getTrendingAnime() {
 
 }
 
-async function getPopularAnime() {
+// async function getPopularAnime() {
 
-    const res = await fetch(
-        `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&with_genres=16`
-    );
+//     const res = await fetch(
+//         `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&with_genres=16`
+//     );
 
-    const data = await res.json();
+//     const data = await res.json();
 
-    displayAnime(
-        popularAnime,
-        data.results
-    );
+//     displayAnime(
+//         popularAnime,
+//         data.results
+//     );
 
-}
+// }
 
 async function getTopRatedAnime() {
 
@@ -120,6 +127,6 @@ async function getTopRatedAnime() {
 }
 
 getTrendingAnime();
-getPopularAnime();
+// getPopularAnime();
 getTopRatedAnime();
 saveToHistory();
