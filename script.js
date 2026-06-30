@@ -12,9 +12,6 @@ const trendingMovies = document.getElementById("trendingMovies");
 const popularMovies = document.getElementById("popularMovies");
 const topRatedMovies = document.getElementById("topRatedMovies");
 const actionMovies = document.getElementById("actionMovies");
-const searchInput = document.getElementById("searchInput");
-const profileBtn = document.getElementById("profileBtn");
-const profileDropdown = document.getElementById("profileDropdown");
 const trailerModal = document.getElementById("trailerModal");
 const trailerVideo = document.getElementById("trailerVideo");
 const closeTrailer = document.getElementById("closeTrailer");
@@ -221,43 +218,6 @@ async function getActionMovies() {
 
 }
 /* ======================
-   SEARCH
-====================== */
-
-searchInput?.addEventListener("input", () => {
-    const value = searchInput.value.toLowerCase();
-    const cards = document.querySelectorAll(".movie-card");
-
-    cards.forEach(card => {
-        const text = card.innerText.toLowerCase();
-        card.style.display = text.includes(value) ? "flex" : "none";
-    });
-});
-
-/* ======================
-   PROFILE DROPDOWN
-====================== */
-
-profileBtn?.addEventListener("click", () => {
-    profileDropdown.classList.toggle("active");
-});
-
-window.addEventListener("click", (e) => {
-    if (
-        profileBtn &&
-        profileDropdown &&
-        !profileBtn.contains(e.target) &&
-        !profileDropdown.contains(e.target)
-    ) {
-        profileDropdown.classList.remove("active");
-    }
-});
-document.addEventListener("scroll", () => {
-
-    profileDropdown?.classList.remove("active");
-
-});
-/* ======================
    TRAILER MODAL
 ====================== */
 
@@ -292,43 +252,3 @@ getPopularMovies();
 getTopRatedMovies();
 getActionMovies();
 
-import { auth } from "./firebase.js";
-
-import {
-    onAuthStateChanged,
-    signOut
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-onAuthStateChanged(auth, (user) => {
-
-    if(user){
-
-        profileBtn.innerHTML = `
-            <img
-                src="${user.photoURL}"
-                style="
-                    width:100%;
-                    height:100%;
-                    border-radius:50%;
-                    object-fit:cover;
-                "
-            >
-        `;
-
-    }
-
-});
-
-const logoutBtn =
-document.getElementById("logoutBtn");
-
-logoutBtn?.addEventListener("click",
-async () => {
-
-    await signOut(auth);
-
-    window.location.href =
-    "login.html";
-
-});

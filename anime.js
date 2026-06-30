@@ -1,8 +1,6 @@
 const apiKey = "35f0bf40a7aebc0072f422a82833e4c6"; 
 
 const searchInput = document.getElementById("searchInput");
-const profileBtn = document.getElementById("profileBtn");
-const profileDropdown = document.getElementById("profileDropdown");
 
 const trendingAnime =
 document.getElementById("trendingAnime");
@@ -120,44 +118,6 @@ async function getTopRatedAnime() {
     );
 
 }
-
-/* ======================
-   SEARCH
-====================== */
-
-searchInput?.addEventListener("input", () => {
-    const value = searchInput.value.toLowerCase();
-    const cards = document.querySelectorAll(".movie-card");
-
-    cards.forEach(card => {
-        const text = card.innerText.toLowerCase();
-        card.style.display = text.includes(value) ? "flex" : "none";
-    });
-});
-
-/* ======================
-   PROFILE DROPDOWN
-====================== */
-
-profileBtn?.addEventListener("click", () => {
-    profileDropdown.classList.toggle("active");
-});
-
-window.addEventListener("click", (e) => {
-    if (
-        profileBtn &&
-        profileDropdown &&
-        !profileBtn.contains(e.target) &&
-        !profileDropdown.contains(e.target)
-    ) {
-        profileDropdown.classList.remove("active");
-    }
-});
-document.addEventListener("scroll", () => {
-
-    profileDropdown?.classList.remove("active");
-
-});
 
 getTrendingAnime();
 getPopularAnime();
